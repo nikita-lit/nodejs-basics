@@ -1,0 +1,50 @@
+<h1>{{ title }}</h1>
+<p>Welcome to {{ title }}</p>
+<style>
+	.flex-container {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.error {
+		color: red;
+		font-weight: bold;
+	}
+
+	.success {
+		color: green;
+		font-weight: bold;
+	}
+</style>
+{{# if success }}
+	<div class="success">
+		<h2>Successful validation!</h2>
+	</div>
+{{ else }}
+	{{# if errors }}
+		<div class="error">
+			<ul>
+				{{# each errors }}
+					<li>{{ this.msg }}</li>
+				{{/each}}
+			</ul>
+		</div>
+	{{/if}}
+
+	<form action="/submit" method="post" class="flex-container" style="gap: 10px; width: 300px">
+		<label class="flex-container">
+			E-Mail
+			<input type="text" name="email" placeholder="email@mail.com">
+		</label>
+		<label class="flex-container">
+			Password
+			<input type="password" name="password">
+		</label>
+		<label class="flex-container">
+			Confirm Password
+			<input type="password" name="confirmPassword">
+		</label>
+
+		<input type="submit" value="Sign Up">
+	</form>
+{{/if}}
