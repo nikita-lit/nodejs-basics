@@ -20,6 +20,7 @@ app.get('/', async (req, res) => {
     });
 });
 
+// -------------------------------------------
 // Uudise kustutamine
 app.post('/news/delete', async (req, res) => {
     const { id } = req.body;
@@ -45,10 +46,12 @@ app.get('/news/delete/:id', async (req, res) => {
     res.redirect('/');
 });
 
+// -------------------------------------------
 app.get('/search', async (req, res) => {
     res.redirect('/news/' + req.query.q);
 });
 
+// -------------------------------------------
 app.get('/news/create', (req, res) => {
     res.render('news_create', {title: 'Lisa uudis', errors: [], values: {}});
 });
@@ -58,6 +61,7 @@ app.post(
 '/news/create',
 
 //andmete valideerimine
+upload.single('image'),
 body('title').trim().notEmpty().withMessage('Pealkiri on kohustuslik'),
 body('content').trim().notEmpty().withMessage('Sisu on kohustuslik'),
 
@@ -73,6 +77,7 @@ async (req, res) => {
         }
 
         return res.render('news_create', {
+            title: 'Lisa uudis',
             errors: errors.array(),
             values: req.body
         });
@@ -85,10 +90,16 @@ async (req, res) => {
     res.redirect('/');
 });
 
+// -------------------------------------------
 app.get('/news/:id/edit', async (req, res) => {
     const id = req.params.id;
     const news = await getNewsById(id);
-    res.render('edit', { title: 'Muuda uudist', news });
+    res.render('edit', {
+        title: 'Muuda uudist',
+        errors: [],
+        values: {},
+        news
+    });
 });
 
 app.post(
@@ -112,7 +123,8 @@ app.post(
                 fs.unlinkSync(path.join('uploads', req.file.filename));
             }
 
-            return res.render('news_edit', {
+            return res.render('edit', {
+                title: 'Muuda uudist',
                 errors: errors.array(),
                 values: req.body,
                 news: news
@@ -144,6 +156,7 @@ app.post(
     }
 );
 
+// -------------------------------------------
 app.get('/news/:id', async (req, res) => {
     const id = req.params.id;
     const news = await getNewsById(id);
@@ -153,27 +166,9 @@ app.get('/news/:id', async (req, res) => {
         return;
     }
 
-    let image = news.image;
-    const filePath = news.image ? path.join('uploads', news.image) : null;
-
-    if (req.file)
-    {
-        // uus pilt lisati
-        if (filePath && fs.existsSync(filePath))
-            fs.unlinkSync(filePath);
-
-        image = req.file.filename;
-    }
-    else
-    {
-        // uut pilti ei lisatud, aga vana on kadunud
-        if (filePath && !fs.existsSync(filePath))
-            image = null;
-    }
-
     res.render('news', {
         title: news.title,
-        image: image,
+        image: news.image,
         news
     });
 });

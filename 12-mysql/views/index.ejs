@@ -2,70 +2,62 @@
 <html lang="et">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
 
-    <style>
-        html {
-            font-size: 18px;
-        }
-
-        .success {
-            background-color: green;
-            padding: 10px;
-            color: white;
-        }
-
-        .error {
-            background-color: red;
-            padding: 10px;
-            color: white;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Uudised</h1>
+    <div class="container mt-4">
+        <h1 class="mb-4">Uudised</h1>
 
-    <% if (msg === 'deleted') { %>
-        <p class="success">Postitus kustutati</p>
-    <% } %>
+        <!-- Сообщения -->
+        <% if (msg === 'deleted') { %>
+            <div class="alert alert-success">Postitus kustutati</div>
+        <% } %>
 
-    <% if (msg === 'delete_failed') { %>
-        <p class="error">Postitust ei õnnestunud kustutada</p>
-    <% } %>
+        <% if (msg === 'delete_failed') { %>
+            <div class="alert alert-danger">Postitust ei õnnestunud kustutada</div>
+        <% } %>
 
-<% news.forEach(n => { %>
-    <h2>
-        <a href="/news/<%= n.id %>"><%= n.title %></a>
-    </h2>
+        <% news.forEach(n => { %>
+            <div class="card mb-3">
+                <div class="card-body">
 
-    <% if (n.image) { %>
-        <img src="/uploads/<%= n.image %>" style="max-width:100px"> <br>
-    <% } %>
+                    <h5 class="card-title">
+                        <a href="/news/<%= n.id %>"><%= n.title %></a>
+                    </h5>
 
-    <p><%= n.content %></p>
-    <!--<a href="/news/delete/<%= n.id %>">Kustuta</a>-->
+                    <% if (n.image) { %>
+                        <img src="/uploads/<%= n.image %>" class="img-thumbnail mb-2" style="max-width:150px;">
+                    <% } %>
 
-    <div style="display: flex; flex-direction: row">
-        <form action="/news/<%= n.id %>/edit" method="GET">
-            <button type="submit">Muuda</button>
+                    <p class="card-text">ID: <%= n.id %></p>
+                    <p class="card-text"><%= n.content %></p>
+
+                    <div class="d-flex gap-2">
+                        <form action="/news/<%= n.id %>/edit" method="GET">
+                            <button type="submit" class="btn btn-warning btn-sm">Muuda</button>
+                        </form>
+
+                        <form action="/news/delete" method="POST" onsubmit="return confirm('Kas oled kindel, et soovid selle uudise kustutada?');">
+                            <input type="hidden" name="id" value="<%= n.id %>">
+                            <button type="submit" class="btn btn-danger btn-sm">Kustuta</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+
+        <form action="/search" method="GET" class="d-flex mb-3">
+            <input type="text" name="q" class="form-control me-2" placeholder="Otsi uudiseid">
+            <button type="submit" class="btn btn-primary">Otsi</button>
         </form>
 
-        <form action="/news/delete" method="POST" onsubmit="return confirm('Kas oled kindel, et soovid selle uudise kustutada?');">
-            <input type="hidden" name="id" value="<%= n.id %>">
-            <button type="submit">Kustuta</button>
-        </form>
+        <a href="/news/create" class="btn btn-success">Lisa uudis</a>
     </div>
-<% }) %>
 
-    <br><br>
-
-    <form action="/search" method="GET">
-        <input type="text" name="q">
-        <button type="submit">Otsi</button>
-    </form>
-
-    <br>
-    <a href="news/create">Lisa uudis</a>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
