@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+</head>
+<body>
+
+<h2><%= news.title %></h2>
+
+<% if (news.image) { %>
+    <img src="/uploads/<%= news.image %>" style="max-width:100px"> <br>
+<% } %>
+
+<p><%= news.content %></p>
+
+<a href="/">Tagasi avalehele</a>
+
+</body>
+</html>
