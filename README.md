@@ -2,3 +2,5 @@ See projekt loodi YouTube’i videote järgi: https://www.youtube.com/playlist?l
 
 
 Samuti tehti ülesanne MySQL-i kohta Metsheini kursuselt: https://metshein.com/courses/nodejs-express-ja-mariadb-veebiarendus/lessons/mysql-uhendus-ja-andmete-lugemine-read/
+
+<img width="1426" height="908" alt="image" src="https://github.com/user-attachments/assets/cd63ce0d-af68-4621-9d37-2403aa11f3bd" />
